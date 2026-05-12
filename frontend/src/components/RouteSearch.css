@@ -1,0 +1,476 @@
+.route-search {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+}
+
+.route-search__container {
+  background: #ffffff;
+  color: #1e293b;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+}
+
+.route-search__header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.route-search__menu-btn {
+  border: none;
+  background: transparent;
+  color: #334155;
+  font-size: 1.45rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px 6px;
+}
+
+.route-search__title {
+  font-size: 1.95rem;
+  margin: 0;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.route-search__form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.route-search__directions {
+  display: grid;
+  grid-template-columns: 32px 1fr auto;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.route-search__left-icons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding-top: 12px;
+}
+
+.route-search__pin {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 3px solid currentColor;
+  background: #ffffff;
+}
+
+.route-search__pin--origin {
+  color: #0ea5e9;
+}
+
+.route-search__pin--destination {
+  color: #ef4444;
+}
+
+.route-search__pin-separator {
+  color: #94a3b8;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.route-search__inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.route-search__input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.route-search__input-extra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.route-search__input-wrapper {
+  position: relative;
+}
+
+.route-search__input {
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 8px;
+  background: #f1f5f9;
+  color: #0f172a;
+  padding: 0 44px 0 14px;
+  font-size: 1.05rem;
+  outline: 2px solid transparent;
+  transition: outline-color 0.15s ease;
+}
+
+.route-search__input:focus {
+  outline-color: #60a5fa;
+}
+
+.route-search__input::placeholder {
+  color: #94a3b8;
+}
+
+.route-search__input--error {
+  outline-color: #f87171;
+}
+
+.route-search__search-btn,
+.route-search__clear-btn {
+  position: absolute;
+  top: 50%;
+  right: 9px;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 1rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.route-search__search-btn:hover,
+.route-search__clear-btn:hover {
+  background: #e2e8f0;
+}
+
+.route-search__swap-btn {
+  width: 40px;
+  height: 100px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #334155;
+  font-size: 1.7rem;
+  cursor: pointer;
+  align-self: center;
+}
+
+.route-search__swap-btn:hover {
+  color: #0ea5e9;
+  background: #f8fafc;
+}
+
+.route-search__swap-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background: transparent;
+  color: #94a3b8;
+}
+
+.route-search__location-btn {
+  border: none;
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.12);
+  color: #0369a1;
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.route-search__location-btn:hover {
+  background: rgba(14, 165, 233, 0.2);
+}
+
+.route-search__location-btn--active {
+  background: #0ea5e9;
+  color: #ffffff;
+}
+
+.route-search__location-btn:disabled {
+  opacity: 0.65;
+  cursor: progress;
+}
+
+.route-search__location-hint {
+  color: #334155;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.route-search__location-hint--error {
+  color: #dc2626;
+}
+
+.route-search__divider {
+  border-top: 1px solid #e2e8f0;
+  margin-top: 4px;
+}
+
+.route-search__footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.route-search__departure {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.route-search__departure-icon {
+  color: #64748b;
+  font-size: 1.2rem;
+}
+
+.route-search__departure-btn {
+  border: none;
+  background: transparent;
+  color: #111827;
+  font-size: 1.45rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+}
+
+.route-search__departure-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 260px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.2);
+  overflow: hidden;
+  z-index: 20;
+}
+
+.route-search__departure-menu-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 14px 16px;
+  font-size: 1.15rem;
+  color: #1f2937;
+  cursor: pointer;
+}
+
+.route-search__departure-menu-item:hover {
+  background: #f1f5f9;
+}
+
+.route-search__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.route-search__ghost-btn,
+.route-search__primary-btn {
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.route-search__ghost-btn {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.route-search__primary-btn {
+  background: #0ea5e9;
+  color: #ffffff;
+}
+
+.route-search__primary-btn:hover {
+  background: #0284c7;
+}
+
+.route-search__error {
+  color: #dc2626;
+  font-size: 0.8rem;
+}
+
+.route-search__suggestions {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 18px 30px rgba(15, 23, 42, 0.2);
+  overflow: hidden;
+  z-index: 19;
+}
+
+.route-search__suggestion-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  padding: 11px 14px;
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+}
+
+.route-search__suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.route-search__suggestion-item:hover,
+.route-search__suggestion-item--highlighted {
+  background: #f8fafc;
+}
+
+.route-search__suggestion-icon {
+  color: #64748b;
+}
+
+.route-search__suggestion-main {
+  min-width: 0;
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.route-search__suggestion-name {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.route-search__suggestion-detail {
+  color: #64748b;
+  font-size: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.route-search__suggestion-empty {
+  padding: 14px;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.route-search__recent-inline {
+  border-top: 1px solid #e2e8f0;
+  padding: 10px 12px 12px;
+}
+
+.route-search__recent-title {
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.route-search__recent-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: #f8fafc;
+  border-radius: 7px;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  color: #334155;
+  cursor: pointer;
+}
+
+.route-search__recent-item + .route-search__recent-item {
+  margin-top: 7px;
+}
+
+.route-search__recent-item:hover {
+  background: #e2e8f0;
+}
+
+.route-search__popular {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.route-search__popular-item {
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  color: #0f172a;
+  padding: 7px 12px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.route-search__popular-item:hover {
+  background: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .route-search {
+    max-width: 100%;
+  }
+
+  .route-search__title {
+    font-size: 1.55rem;
+  }
+
+  .route-search__directions {
+    grid-template-columns: 26px 1fr;
+  }
+
+  .route-search__swap-btn {
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 34px;
+  }
+
+  .route-search__input-extra {
+    width: 100%;
+  }
+
+  .route-search__location-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .route-search__footer-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .route-search__actions {
+    width: 100%;
+  }
+
+  .route-search__primary-btn,
+  .route-search__ghost-btn {
+    flex: 1;
+  }
+}

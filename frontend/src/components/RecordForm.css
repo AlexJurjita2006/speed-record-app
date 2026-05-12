@@ -1,0 +1,213 @@
+/* ===========================================
+   RECORD FORM STYLES
+   =========================================== */
+
+.record-form {
+  max-width: 600px;
+  margin: 0 auto;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-8);
+  box-shadow: var(--shadow-xl);
+}
+
+.record-form__title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-black);
+  margin-bottom: var(--spacing-2);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.record-form__subtitle {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-6);
+}
+
+.record-form__group {
+  margin-bottom: var(--spacing-6);
+}
+
+.record-form__label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-2);
+}
+
+.record-form__input {
+  width: 100%;
+  padding: var(--spacing-3) var(--spacing-4);
+  background: var(--color-bg-tertiary);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-primary);
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  transition: all var(--transition-base);
+}
+
+.record-form__input:focus {
+  border-color: var(--color-accent-tertiary);
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.15);
+  outline: none;
+}
+
+.record-form__input--time {
+  letter-spacing: 2px;
+  text-align: center;
+  font-size: var(--text-2xl);
+}
+
+/* Buton radio stilizat pentru tipul de înregistrare */
+.record-form__radio-group {
+  display: flex;
+  gap: var(--spacing-3);
+}
+
+.record-form__radio {
+  flex: 1;
+}
+
+.record-form__radio input {
+  display: none;
+}
+
+.record-form__radio-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-4);
+  background: var(--color-bg-tertiary);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+
+.record-form__radio input:checked + .record-form__radio-label {
+  border-color: var(--color-accent-tertiary);
+  background: rgba(0, 255, 136, 0.05);
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.1);
+}
+
+.record-form__radio-icon {
+  font-size: var(--text-2xl);
+}
+
+/* Selector de mașină */
+.record-form__car-select {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--spacing-3);
+}
+
+.record-form__car-option {
+  padding: var(--spacing-3);
+  background: var(--color-bg-tertiary);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.record-form__car-option--selected {
+  border-color: var(--color-accent-primary);
+  background: rgba(0, 212, 255, 0.1);
+  box-shadow: 0 0 12px rgba(0, 212, 255, 0.2);
+}
+
+/* Buton submit */
+.record-form__submit {
+  width: 100%;
+  padding: var(--spacing-4);
+  background: linear-gradient(135deg, var(--color-accent-tertiary), #00cc66);
+  border: none;
+  border-radius: var(--radius-xl);
+  color: var(--color-text-inverse);
+  font-weight: var(--font-bold);
+  font-size: var(--text-lg);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-4);
+}
+
+.record-form__submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 255, 136, 0.3);
+}
+
+/* Cronometru live (opțional) */
+.record-form__stopwatch {
+  background: var(--color-bg-card);
+  border: 2px solid var(--color-accent-primary);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-4);
+  text-align: center;
+  margin-bottom: var(--spacing-6);
+}
+
+.record-form__stopwatch-time {
+  font-family: var(--font-mono);
+  font-size: 3rem;
+  font-weight: var(--font-black);
+  color: var(--color-accent-primary);
+  text-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+}
+
+.record-form__stopwatch-controls {
+  display: flex;
+  gap: var(--spacing-3);
+  justify-content: center;
+  margin-top: var(--spacing-3);
+}
+
+.record-form__stopwatch-btn {
+  padding: var(--spacing-2) var(--spacing-6);
+  border-radius: var(--radius-full);
+  font-weight: var(--font-bold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: none;
+}
+
+.record-form__stopwatch-btn--start {
+  background: var(--color-accent-tertiary);
+  color: #000;
+}
+
+.record-form__stopwatch-btn--stop {
+  background: var(--color-accent-secondary);
+  color: white;
+}
+
+.record-form__stopwatch-btn--reset {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+}
+
+@media (max-width: 480px) {
+  .record-form {
+    padding: var(--spacing-4);
+  }
+  .record-form__stopwatch-time {
+    font-size: 2rem;
+  }
+}

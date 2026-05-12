@@ -1,0 +1,16 @@
+{
+  "name": "speed-record-app",
+  "version": "1.0.0",
+  "description": "Full-stack Speed Record application",
+  "private": true,
+  "scripts": {
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install && cd ..",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
+    "build": "cd frontend && npm run build",
+    "start-backend": "cd backend && npm run dev",
+    "start-frontend": "cd frontend && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

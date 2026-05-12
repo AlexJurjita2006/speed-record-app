@@ -1,0 +1,26 @@
+echo "# Dependencies
+node_modules/
+
+# Build files
+dist/
+build/
+
+# Environment variables
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# APK files
+*.apk
+
+# Logs
+*.log
+npm-debug.log*
+" > .gitignore

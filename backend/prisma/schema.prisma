@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  username  String   @unique
+  password  String   // hashed
+  records   Record[]
+  createdAt DateTime @default(now())
+}
+
+model Route {
+  id         Int      @id @default(autoincrement())
+  startCity  String
+  endCity    String
+  startLat   Float
+  startLon   Float
+  endLat     Float
+  endLon     Float
+  distanceKm Float
+  geometry   String   // JSON stringified polyline sau GeoJSON
+  createdAt  DateTime @default(now())
+  
+  records    Record[]
+  @@unique([startCity, endCity])
+}
+
+model Record {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  routeId      Int
+  timeSeconds  Int
+  avgSpeedKmh  Float
+  createdAt    DateTime @default(now())
+  
+  user         User     @relation(fields: [userId], references: [id])
+  route        Route    @relation(fields: [routeId], references: [id])
+  
+  @@unique([userId, routeId])
+}
