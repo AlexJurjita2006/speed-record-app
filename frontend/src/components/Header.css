@@ -111,6 +111,17 @@
   color: #ff4455;
 }
 
+/* Download */
+.header__btn--download {
+  border-color: rgba(255, 193, 7, 0.35);
+  color: #ffd166;
+}
+
+.header__btn--download:hover {
+  border-color: rgba(255, 193, 7, 0.65);
+  color: #ffe8a1;
+}
+
 /* Navigate - Modern Design */
 .header__btn--navigate {
   background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(0, 255, 136, 0.15));

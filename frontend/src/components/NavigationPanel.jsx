@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './NavigationPanel.css';
 
 function NavigationPanel({ instruction, distance, direction, streetName, eta, totalDistance, onStop, compact = false }) {
@@ -67,6 +67,12 @@ function NavigationPanel({ instruction, distance, direction, streetName, eta, to
           </a>
         </div>
       )}
+
+      <div className="nav-panel__actions">
+        <Link to="/download" className="nav-download-btn">
+          📱 Instalează aplicația
+        </Link>
+      </div>
 
       <div className="nav-panel__instruction">
         <span className={`nav-panel__icon nav-panel__icon--${direction || 'straight'}`}>

@@ -47,9 +47,36 @@ jobs:
           chmod +x ./gradlew
           ./gradlew assembleDebug
 
-      - name: Upload APK
+      - name: Upload APK (artifact)
         uses: actions/upload-artifact@v4
         with:
           name: SpeedRecord-APK
           path: frontend/android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 90
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: Speed Record v${{ github.run_number }}
+          body: |
+            🏁 **Speed Record** – build automat generat din commit ${{ github.sha }}.
+            
+            📱 **Descarcă APK-ul** de mai jos și instalează-l pe telefon.
+            
+            🔗 Link permanent către acest release: ${{ github.event.repository.html_url }}/releases/tag/v${{ github.run_number }}
+          draft: false
+          prerelease: false
+
+      - name: Upload APK to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: frontend/android/app/build/outputs/apk/debug/app-debug.apk
+          asset_name: SpeedRecord.apk
+          asset_content_type: application/vnd.android.package-archive

@@ -46,6 +46,13 @@ function Header({ currentPage, onNavigate, user, onLogout }) {
 
           <div className="header__actions">
             <button
+              className="header__btn header__btn--download"
+              onClick={() => navigate('download')}
+            >
+              ⬇️ Download
+            </button>
+
+            <button
               className="header__btn header__btn--navigate"
               onClick={() => navigate('map')}
             >
@@ -81,6 +88,9 @@ function Header({ currentPage, onNavigate, user, onLogout }) {
       </header>
 
        <div className={`header__mobile-nav ${mobileOpen ? 'header__mobile-nav--open' : ''}`}>
+         <button className="header__mobile-link" onClick={() => navigate('download')}>
+           ⬇️ Download
+         </button>
          <button className="header__mobile-link" onClick={() => navigate('map')}>
            🗺️ Navigheaza
          </button>

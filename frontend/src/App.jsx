@@ -12,6 +12,7 @@ import CommunityPage from './pages/CommunityPage';
 import EventsPage from './pages/EventsPage';
 import ContactPage from './pages/ContactPage';
 import TermsPage from './pages/TermsPage';
+import DownloadPage from './pages/DownloadPage';
 import { useAuth } from './context/AuthContext';
 import './App.css';
 
@@ -37,6 +38,8 @@ function App() {
         return 'events';
       case '/terms':
         return 'terms';
+      case '/download':
+        return 'download';
       case '/login':
         return 'login';
       case '/register':
@@ -63,6 +66,8 @@ function App() {
         return '/events';
       case 'terms':
         return '/terms';
+      case 'download':
+        return '/download';
       case 'login':
         return '/login';
       case 'register':
@@ -194,6 +199,9 @@ function App() {
 
       case 'terms':
         return <TermsPage onNavigate={navigateTo} />;
+
+      case 'download':
+        return <DownloadPage onNavigate={navigateTo} />;
 
       default:
         return (

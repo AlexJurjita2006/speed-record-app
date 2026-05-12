@@ -107,6 +107,34 @@
   transform: translateX(2px);
 }
 
+.nav-panel__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.8rem;
+}
+
+.nav-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 26, 26, 0.45);
+  background: rgba(255, 26, 26, 0.14);
+  color: #ff1a1a;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.nav-download-btn:hover {
+  background: rgba(255, 26, 26, 0.25);
+  border-color: #ff1a1a;
+  color: #ff4d4d;
+  transform: translateY(-1px);
+}
+
 .nav-panel__instruction {
   display: flex;
   align-items: center;
