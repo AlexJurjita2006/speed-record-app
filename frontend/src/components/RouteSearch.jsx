@@ -187,18 +187,25 @@ function RouteSearch({ onSearch, popularRoutes = [] }) {
           signal: controller.signal,
         });
 
+        console.log('✅ Geoapify Response:', response.data);
+
         const oppositeValue = focusedField === 'origin' ? destination : origin;
         const normalizedOpposite = normalizeText(oppositeValue);
         const remoteSuggestions = (response.data || []).filter(
           (item) => normalizeText(item?.name || '') !== normalizedOpposite
         );
 
+        console.log('📍 Sugestii după filtrare:', remoteSuggestions.length > 0 ? remoteSuggestions : 'Folosind fallback locale');
+
         setSuggestions(remoteSuggestions.length > 0 ? remoteSuggestions : localSuggestions);
         setActiveSuggestionIndex(-1);
       } catch (error) {
         if (error.code === 'ERR_CANCELED') {
+          console.log('⚠️ Request anulat');
           return;
         }
+        console.error('❌ Eroare la fetch sugestii Geoapify:', error.message || error);
+        console.log('📍 Folosind sugestii locale din fallback');
         setSuggestions(localSuggestions);
       } finally {
         setLoadingSuggestions(false);

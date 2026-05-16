@@ -34,13 +34,6 @@ const HomePage = () => {
     },
   ];
 
-  const stats = [
-    { value: 51237, suffix: '+', label: 'Utilizatori activi', icon: '👥' },
-    { value: 214, suffix: '+', label: 'Evenimente anul acesta', icon: '🏁' },
-    { value: 847, suffix: '', label: 'Comunitati auto', icon: '🏎️' },
-    { value: 1200000, suffix: '+', label: 'Km parcursi pe circuite', icon: '🛣️' },
-  ];
-
   return (
     <div className="homepage">
       {/* ===== HERO SECTION ===== */}
@@ -99,21 +92,7 @@ const HomePage = () => {
         </p>
       </div>
 
-      {/* ===== STATS BAR ===== */}
-      <section className="stats-bar">
-        <div className="stats-container">
-          {stats.map((stat, index) => (
-            <div className="stat-item" key={index}>
-              <div className="stat-icon">{stat.icon}</div>
-              <div className="stat-value">
-                <span className="stat-number">{stat.value.toLocaleString()}</span>
-                <span className="stat-suffix">{stat.suffix}</span>
-              </div>
-              <div className="stat-label">{stat.label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+
 
       {/* ===== VALORI (Performanta / Siguranta / Comunitate) ===== */}
       <section className="features-section">

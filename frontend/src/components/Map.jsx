@@ -64,6 +64,8 @@ function Map({
   // Noile proprietăți pentru navigare
   navigationMode = false,
   currentPosition = null,
+  navigationPathCoordinates = null, // array [lng, lat] (ruta rămasă)
+  offRouteCoordinates = null, // array [lng, lat] (ruta completă pentru abatere)
   followUser = true,
   onRecalculate = null,
 }) {
@@ -77,6 +79,21 @@ function Map({
 
   const resolvedRoute = routeData ?? fetchedRoute;
   const routeCoordinates = useMemo(() => {
+    if (navigationMode && Array.isArray(navigationPathCoordinates) && navigationPathCoordinates.length) {
+      return navigationPathCoordinates
+        .map((point) => {
+          if (!Array.isArray(point) || point.length < 2) {
+            return null;
+          }
+          const [lon, lat] = point;
+          if (typeof lat !== 'number' || typeof lon !== 'number') {
+            return null;
+          }
+          return [lat, lon];
+        })
+        .filter(Boolean);
+    }
+
     const geometry = resolvedRoute?.geometry;
     const coordinates = geometry?.coordinates;
 
@@ -103,13 +120,39 @@ function Map({
         return [lat, lon]; // format [lat, lng] pentru Leaflet
       })
       .filter(Boolean);
-  }, [resolvedRoute]);
+  }, [resolvedRoute, navigationMode, navigationPathCoordinates]);
 
   // Convertim coordonatele înapoi în [lng, lat] pentru verificarea abaterii
   const routeCoordinatesLngLat = useMemo(
     () => routeCoordinates.map(([lat, lng]) => [lng, lat]),
     [routeCoordinates]
   );
+  const offRouteCoordinatesLngLat = useMemo(() => {
+    if (Array.isArray(offRouteCoordinates) && offRouteCoordinates.length) {
+      return offRouteCoordinates;
+    }
+    return routeCoordinatesLngLat;
+  }, [offRouteCoordinates, routeCoordinatesLngLat]);
+  const fullNavigationCoordinates = useMemo(() => {
+    if (!navigationMode || !Array.isArray(offRouteCoordinates) || !offRouteCoordinates.length) {
+      return [];
+    }
+
+    return offRouteCoordinates
+      .map((point) => {
+        if (!Array.isArray(point) || point.length < 2) {
+          return null;
+        }
+
+        const [lon, lat] = point;
+        if (typeof lat !== 'number' || typeof lon !== 'number') {
+          return null;
+        }
+
+        return [lat, lon];
+      })
+      .filter(Boolean);
+  }, [navigationMode, offRouteCoordinates]);
 
   const routeStart = routeCoordinates[0] ?? null;
   const routeEnd = routeCoordinates[routeCoordinates.length - 1] ?? null;
@@ -183,17 +226,17 @@ function Map({
 
   // Detectare abatere și rerutare
   useEffect(() => {
-    if (!navigationMode || !currentPosition || !routeCoordinatesLngLat.length || !onRecalculate) return;
+    if (!navigationMode || !currentPosition || !offRouteCoordinatesLngLat.length || !onRecalculate) return;
 
     const checkOffRoute = () => {
-      if (isOffRoute(currentPosition, routeCoordinatesLngLat, 50)) {
+      if (isOffRoute(currentPosition, offRouteCoordinatesLngLat, 50)) {
         onRecalculate();
       }
     };
 
     const timer = setInterval(checkOffRoute, 3000);
     return () => clearInterval(timer);
-  }, [navigationMode, currentPosition, routeCoordinatesLngLat, onRecalculate]);
+  }, [navigationMode, currentPosition, offRouteCoordinatesLngLat, onRecalculate]);
 
   const isLoading = Boolean(origin && destination && !resolvedRoute && !error);
 
@@ -229,11 +272,19 @@ function Map({
           navigationMode={navigationMode}
         />
 
+        {navigationMode && fullNavigationCoordinates.length >= 2 && (
+          <Polyline positions={fullNavigationCoordinates} pathOptions={{ color: '#0f172a', weight: 6, opacity: 0.35 }} />
+        )}
+
         {routeCoordinates.length >= 2 && (
-          <>
-            <Polyline positions={routeCoordinates} pathOptions={{ color: '#0f172a', weight: 9, opacity: 0.65 }} />
-            <Polyline positions={routeCoordinates} pathOptions={{ color: '#2f80ff', weight: 6 }} />
-          </>
+          navigationMode ? (
+            <Polyline positions={routeCoordinates} pathOptions={{ color: '#2f80ff', weight: 7 }} />
+          ) : (
+            <>
+              <Polyline positions={routeCoordinates} pathOptions={{ color: '#0f172a', weight: 9, opacity: 0.65 }} />
+              <Polyline positions={routeCoordinates} pathOptions={{ color: '#2f80ff', weight: 6 }} />
+            </>
+          )
         )}
 
         {!navigationMode && routeStart && (

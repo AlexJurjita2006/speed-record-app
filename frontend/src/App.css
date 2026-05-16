@@ -114,6 +114,66 @@
   box-shadow: var(--shadow-lg);
 }
 
+.app__modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 8, 14, 0.8);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-4);
+}
+
+.app__modal {
+  width: min(460px, 100%);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-xl);
+}
+
+.app__modal-title {
+  margin: 0 0 var(--spacing-2);
+  font-size: var(--text-xl);
+}
+
+.app__modal-subtitle {
+  margin: 0 0 var(--spacing-4);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+
+.app__modal-input {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  padding: var(--spacing-3);
+  font-size: var(--text-base);
+}
+
+.app__modal-error {
+  margin: var(--spacing-2) 0 0;
+  color: var(--color-error);
+  font-size: var(--text-sm);
+}
+
+.app__modal-submit {
+  margin-top: var(--spacing-4);
+  width: 100%;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-3);
+  font-weight: var(--font-bold);
+  color: var(--color-text-inverse);
+  background: var(--color-accent-primary);
+  cursor: pointer;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .app__main {

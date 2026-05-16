@@ -23,6 +23,7 @@ export const inferRoadTypeFromStep = (step = {}) => {
 };
 
 export const getLegalSpeedForStep = (step) => LEGAL_SPEEDS_KMH[inferRoadTypeFromStep(step)] || LEGAL_SPEEDS_KMH.outside;
+export const ARRIVAL_THRESHOLD_METERS = 20;
 
 /**
  * Cere ruta cu pași de la backend.
@@ -45,19 +46,18 @@ export const fetchNavigationRoute = async (startLat, startLon, endLat, endLon) =
  */
 export const findNextInstruction = (currentPos, steps, fullCoordinates) => {
   if (!steps.length || !fullCoordinates.length) return null;
-
-  // Convertim poziția curentă în [lng, lat] pentru comparare
   const pos = [currentPos.lng, currentPos.lat];
+  const closestIdx = getClosestRoutePointIndex(currentPos, fullCoordinates);
+  const destinationPoint = fullCoordinates[fullCoordinates.length - 1];
+  const distanceToDestination = getDistanceMeters(pos, destinationPoint);
 
-  // Căutăm cel mai apropiat punct de pe traseu
-  let closestIdx = 0;
-  let minDist = Infinity;
-  for (let i = 0; i < fullCoordinates.length; i++) {
-    const d = getDistanceMeters(pos, fullCoordinates[i]);
-    if (d < minDist) {
-      minDist = d;
-      closestIdx = i;
-    }
+  if (distanceToDestination <= ARRIVAL_THRESHOLD_METERS) {
+    return {
+      instruction: 'Ai ajuns la destinație.',
+      distance: 0,
+      direction: 'arrived',
+      street_name: '',
+    };
   }
 
   // Găsim primul pas al cărui way_point este în fața poziției noastre
@@ -77,13 +77,32 @@ export const findNextInstruction = (currentPos, steps, fullCoordinates) => {
     }
   }
 
-  // Dacă am depășit ultimul pas, am ajuns la destinație
+  // Dacă nu mai sunt manevre explicite, continuăm până la punctul final.
   return {
-    instruction: 'Ai ajuns la destinație.',
-    distance: 0,
-    direction: 'arrived',
+    instruction: 'Continuă înainte către destinație.',
+    distance: distanceToDestination,
+    direction: 'straight',
     street_name: '',
   };
+};
+
+export const getClosestRoutePointIndex = (currentPos, fullCoordinates) => {
+  if (!currentPos || !fullCoordinates.length) {
+    return 0;
+  }
+
+  const pos = [currentPos.lng, currentPos.lat];
+  let closestIdx = 0;
+  let minDist = Infinity;
+  for (let i = 0; i < fullCoordinates.length; i += 1) {
+    const distance = getDistanceMeters(pos, fullCoordinates[i]);
+    if (distance < minDist) {
+      minDist = distance;
+      closestIdx = i;
+    }
+  }
+
+  return closestIdx;
 };
 
 /**

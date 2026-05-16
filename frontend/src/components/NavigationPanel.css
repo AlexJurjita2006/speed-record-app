@@ -1,181 +1,137 @@
-.nav-panel {
-  position: relative;
-  background: rgba(15, 23, 42, 0.92);
-  color: #ffffff;
-  padding: 0.9rem 1rem;
-  border-radius: 14px;
-  box-shadow: 0 10px 26px rgba(2, 6, 23, 0.45);
-  backdrop-filter: blur(8px);
+/* ---------- NAV AUTH ---------- */
+.nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
 }
 
-.nav-panel__close {
-  position: absolute;
-  top: 8px;
-  right: 8px;
+/* Buton Google */
+.btn-google-login {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: white;
+  color: #333;
   border: none;
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.nav-panel__close:hover {
-  background: rgba(255, 51, 51, 0.3);
-  color: #ff3333;
-}
-
-/* User Info Section */
-.nav-panel__user {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  margin-bottom: 0.8rem;
-  padding: 0.6rem;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  flex-wrap: wrap;
-}
-
-.nav-panel__avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid rgba(0, 212, 255, 0.4);
-}
-
-.nav-panel__user-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  min-width: 0;
-}
-
-.nav-panel__user-name {
+  padding: 0.6rem 1.4rem;
+  border-radius: 30px;
   font-weight: 600;
-  font-size: 0.95rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.nav-panel__logout-btn {
-  border: none;
-  background: rgba(255, 51, 51, 0.15);
-  color: #ff3333;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  font-size: 1.1rem;
   cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-}
-
-.nav-panel__logout-btn:hover {
-  background: rgba(255, 51, 51, 0.3);
-  transform: scale(1.05);
-}
-
-/* Login Link */
-.nav-panel__login {
-  margin-bottom: 0.8rem;
-  padding: 0.6rem;
-  background: rgba(0, 212, 255, 0.1);
-  border-radius: 10px;
-  border: 1px solid rgba(0, 212, 255, 0.3);
-}
-
-.nav-panel__login-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  color: #00d4ff;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.95rem;
-  transition: all 0.2s ease;
-}
-
-.nav-panel__login-link:hover {
-  color: #00ffff;
-  transform: translateX(2px);
-}
-
-.nav-panel__actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 0.8rem;
-}
-
-.nav-download-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.5rem 0.9rem;
-  border-radius: 9999px;
-  border: 1px solid rgba(255, 26, 26, 0.45);
-  background: rgba(255, 26, 26, 0.14);
-  color: #ff1a1a;
-  font-weight: 700;
+  transition: 0.2s;
   font-size: 0.9rem;
-  text-decoration: none;
-  transition: all 0.2s ease;
 }
 
-.nav-download-btn:hover {
-  background: rgba(255, 26, 26, 0.25);
-  border-color: #ff1a1a;
-  color: #ff4d4d;
+.btn-google-login:hover {
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
   transform: translateY(-1px);
 }
 
-.nav-panel__instruction {
+/* Meniu utilizator autentificat */
+.user-menu {
   display: flex;
   align-items: center;
   gap: 0.7rem;
+  background: rgba(255,255,255,0.05);
+  padding: 0.5rem 1rem;
+  border-radius: 30px;
+  border: 1px solid rgba(255,255,255,0.1);
 }
 
-.nav-panel__icon { font-size: 1.8rem; }
-.nav-panel__text { font-weight: 700; line-height: 1.2; padding-right: 38px; }
-.nav-panel__street { color: rgba(226, 232, 240, 0.9); margin-top: 2px; }
-.nav-panel__distance { font-size: 1.05rem; margin: 0.55rem 0 0.2rem; font-weight: 600; }
-.nav-panel__eta, .nav-panel__total { color: rgba(226, 232, 240, 0.95); font-size: 0.95rem; }
-
-.nav-panel--compact {
-  border-radius: 16px;
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ff1a1a;
 }
 
+.user-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.user-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: white;
+}
+
+.user-username {
+  font-size: 0.75rem;
+  color: #8b949e;
+}
+
+.btn-signout {
+  background: transparent;
+  border: none;
+  color: #ff4d4d;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 50%;
+  transition: 0.2s;
+}
+
+.btn-signout:hover {
+  background: rgba(255,26,26,0.15);
+}
+
+/* Buton download */
+.nav-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: linear-gradient(135deg, #ff1a1a, #cc0000);
+  color: white;
+  padding: 0.6rem 1.4rem;
+  border-radius: 30px;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: 0.3s;
+  box-shadow: 0 4px 12px rgba(255,26,26,0.4);
+}
+
+.nav-download-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(255,26,26,0.6);
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .nav-panel {
-    padding: 0.8rem 0.9rem;
+  .nav-auth {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
   }
+  
+  .user-menu {
+    padding: 0.4rem 0.8rem;
+  }
+  
+  .user-info {
+    display: none; /* ascunde textul pe mobil, arată doar avatarul */
+  }
+}
+/* Placeholder avatar când imaginea lipsește */
+.placeholder-avatar {
+  background: linear-gradient(135deg, #ff1a1a, #cc0000);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+}
 
-  .nav-panel__text {
-    font-size: 0.95rem;
-  }
+/* Asigură tranziția la deconectare */
+.user-menu {
+  animation: fadeIn 0.2s ease;
+}
 
-  .nav-panel__distance {
-    font-size: 1rem;
-  }
-
-  .nav-panel__user {
-    gap: 0.6rem;
-  }
-
-  .nav-panel__avatar {
-    width: 32px;
-    height: 32px;
-  }
-
-  .nav-panel__logout-btn {
-    width: 28px;
-    height: 28px;
-    font-size: 1rem;
-  }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
 }

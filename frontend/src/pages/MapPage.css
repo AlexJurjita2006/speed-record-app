@@ -158,3 +158,148 @@
     right: 10px;
   }
 }
+
+/* Steps preview și navigare */
+.map-page__navigate-btn {
+  background: linear-gradient(135deg, #00d4ff, #0088ff);
+  color: #0a0e14;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 12px rgba(0, 212, 255, 0.3);
+  width: 100%;
+}
+
+.map-page__navigate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+}
+
+.map-page__steps-preview {
+  margin-top: 16px;
+  padding: 12px;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 255, 136, 0.1));
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  border-radius: 8px;
+}
+
+.map-page__steps-preview h4 {
+  margin: 0 0 10px;
+  color: #00d4ff;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.map-page__steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.map-page__step-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #e8eaed;
+}
+
+.step-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.step-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.step-distance {
+  font-size: 0.8rem;
+  color: #9aa0a6;
+  flex-shrink: 0;
+}
+
+.map-page__steps-more {
+  padding: 6px 8px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #9aa0a6;
+}
+
+/* Mobile-first tuning for map + route search flow */
+@media (max-width: 1024px) {
+  .map-page {
+    height: 100dvh;
+  }
+
+  .map-page__overlay {
+    grid-template-columns: 1fr;
+  }
+
+  .map-page__search-panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    max-height: 62dvh;
+    padding: 14px;
+    border-right: none;
+    border-top: 1px solid #e2e8f0;
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+    z-index: 18;
+  }
+
+  .map-page--navigating .map-page__search-panel {
+    display: none;
+  }
+
+  .map-page__route-info-panel {
+    margin-top: 12px;
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .map-page__route-info-item {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .map-page__navigate-btn {
+    min-height: 46px;
+    border-radius: 12px;
+  }
+
+  .map-page__steps-list {
+    max-height: 140px;
+  }
+
+  .map-page__step-item {
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .map-page__search-panel {
+    max-height: 68dvh;
+    padding: 12px 12px calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .map-page__nav-overlay {
+    top: env(safe-area-inset-top, 8px);
+    left: 8px;
+    right: 8px;
+  }
+}

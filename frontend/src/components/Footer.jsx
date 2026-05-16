@@ -1,4 +1,5 @@
 import './Footer.css';
+import { isWebApp } from '../platform';
 
 const InstagramIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true" className="footer__social-icon">
@@ -20,10 +21,12 @@ const LinkedInIcon = () => (
 
 function Footer({ onNavigate }) {
   const currentYear = new Date().getFullYear();
+  const showWebDownload = isWebApp();
 
   const footerLinks = {
     explorare: [
       { label: 'Navigație Live', icon: '🗺️', page: 'map' },
+      ...(showWebDownload ? [{ label: 'Descărcare Android', icon: '⬇️', page: 'download' }] : []),
     ],
     comunitate: [
       { label: 'Comunitate', icon: '👥', page: 'community' },

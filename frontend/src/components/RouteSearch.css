@@ -474,3 +474,93 @@
     flex: 1;
   }
 }
+
+/* Mobile-first refinement for touch interactions */
+@media (max-width: 1024px) {
+  .route-search__container {
+    border-radius: 14px;
+    padding: 12px;
+  }
+
+  .route-search__header {
+    margin-bottom: 10px;
+    gap: 8px;
+  }
+
+  .route-search__menu-btn {
+    display: none;
+  }
+
+  .route-search__title {
+    font-size: 1.18rem;
+  }
+
+  .route-search__directions {
+    grid-template-columns: 24px 1fr;
+    gap: 8px;
+  }
+
+  .route-search__left-icons {
+    padding-top: 14px;
+  }
+
+  .route-search__input {
+    height: 50px;
+    border-radius: 12px;
+    font-size: 1rem;
+    padding: 0 42px 0 12px;
+  }
+
+  .route-search__swap-btn {
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 40px;
+    border-radius: 10px;
+    background: #f8fafc;
+    font-size: 1.3rem;
+    margin-top: 2px;
+  }
+
+  .route-search__footer-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .route-search__departure {
+    width: 100%;
+  }
+
+  .route-search__departure-btn {
+    font-size: 1rem;
+  }
+
+  .route-search__departure-menu {
+    width: 100%;
+  }
+
+  .route-search__actions {
+    width: 100%;
+  }
+
+  .route-search__ghost-btn,
+  .route-search__primary-btn {
+    min-height: 44px;
+    border-radius: 10px;
+  }
+
+  .route-search__suggestions {
+    top: calc(100% + 6px);
+    border-radius: 12px;
+  }
+
+  .route-search__popular {
+    margin-top: 8px;
+    gap: 6px;
+  }
+
+  .route-search__popular-item {
+    min-height: 34px;
+    font-size: 0.76rem;
+  }
+}

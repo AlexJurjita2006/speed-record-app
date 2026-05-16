@@ -14,11 +14,15 @@ import ContactPage from './pages/ContactPage';
 import TermsPage from './pages/TermsPage';
 import DownloadPage from './pages/DownloadPage';
 import { useAuth } from './context/AuthContext';
+import { isWebApp } from './platform';
 import './App.css';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [legacyUser, setLegacyUser] = useState(null);
+  const [oauthProfile, setOauthProfile] = useState({});
+  const [carDraft, setCarDraft] = useState('');
+  const [carPromptError, setCarPromptError] = useState('');
   const loadingTimerRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
@@ -106,6 +110,30 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!authUser) {
+      setOauthProfile({});
+      setCarDraft('');
+      setCarPromptError('');
+      return;
+    }
+
+    const profileKey = `speedrecord_profile_${authUser.id}`;
+    const savedProfile = localStorage.getItem(profileKey);
+    if (!savedProfile) {
+      setOauthProfile({});
+      return;
+    }
+
+    try {
+      setOauthProfile(JSON.parse(savedProfile));
+    } catch (error) {
+      console.error('Error parsing OAuth profile:', error);
+      localStorage.removeItem(profileKey);
+      setOauthProfile({});
+    }
+  }, [authUser]);
+
   const handleLogin = (userData) => {
     setLegacyUser(userData);
     localStorage.setItem('speedrecord_user', JSON.stringify(userData));
@@ -127,9 +155,35 @@ function App() {
     if (authUser) {
       await signOut();
     }
+    setOauthProfile({});
+    setCarDraft('');
+    setCarPromptError('');
     setLegacyUser(null);
     localStorage.removeItem('speedrecord_user');
     navigateTo('home');
+  };
+
+  const oauthCar =
+    (authUser && (oauthProfile?.car || authUser.user_metadata?.car || '').trim()) || '';
+
+  const needsCarPrompt = Boolean(authUser && !oauthCar);
+
+  const handleSaveCar = (event) => {
+    event.preventDefault();
+    if (!authUser) return;
+
+    const trimmedCar = carDraft.trim();
+    if (!trimmedCar) {
+      setCarPromptError('Completează mașina ta pentru a continua.');
+      return;
+    }
+
+    const profileKey = `speedrecord_profile_${authUser.id}`;
+    const updatedProfile = { ...oauthProfile, car: trimmedCar };
+    localStorage.setItem(profileKey, JSON.stringify(updatedProfile));
+    setOauthProfile(updatedProfile);
+    setCarDraft('');
+    setCarPromptError('');
   };
 
   const user = authUser
@@ -142,8 +196,16 @@ function App() {
           'Pilot',
         email: authUser.email,
         avatar: authUser.user_metadata?.avatar_url || authUser.email?.charAt(0)?.toUpperCase() || '👤',
+        avatarUrl: authUser.user_metadata?.avatar_url || '',
+        car: oauthCar,
       }
-    : legacyUser;
+    : legacyUser
+      ? {
+          ...legacyUser,
+          avatarUrl: '',
+          car: legacyUser.car || '',
+        }
+      : null;
 
   const navigateTo = (page) => {
     setIsLoading(true);
@@ -189,7 +251,7 @@ function App() {
         return <MapPage onNavigate={navigateTo} />;
 
       case 'community':
-        return <CommunityPage onNavigate={navigateTo} />;
+        return <CommunityPage user={user} onNavigate={navigateTo} />;
 
       case 'events':
         return <EventsPage onNavigate={navigateTo} />;
@@ -201,7 +263,9 @@ function App() {
         return <TermsPage onNavigate={navigateTo} />;
 
       case 'download':
-        return <DownloadPage onNavigate={navigateTo} />;
+        return isWebApp()
+          ? <DownloadPage onNavigate={navigateTo} />
+          : <HomePage onNavigate={navigateTo} user={user} />;
 
       default:
         return (
@@ -239,6 +303,32 @@ function App() {
       </main>
 
       <Footer onNavigate={navigateTo} />
+
+      {needsCarPrompt && (
+        <div className="app__modal-backdrop">
+          <form className="app__modal" onSubmit={handleSaveCar}>
+            <h3 className="app__modal-title">🚗 Completează mașina ta</h3>
+            <p className="app__modal-subtitle">
+              Pentru contul conectat trebuie să completezi ce mașină conduci.
+            </p>
+            <input
+              className="app__modal-input"
+              type="text"
+              value={carDraft}
+              onChange={(event) => {
+                setCarDraft(event.target.value);
+                if (carPromptError) setCarPromptError('');
+              }}
+              placeholder="Ex: BMW M4"
+              autoFocus
+            />
+            {carPromptError && <p className="app__modal-error">⚠️ {carPromptError}</p>}
+            <button type="submit" className="app__modal-submit">
+              Salvează
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 }

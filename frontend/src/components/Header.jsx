@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 import './Header.css';
 
 const FacebookIcon = () => (
@@ -13,6 +14,14 @@ const FacebookIcon = () => (
 function Header({ currentPage, onNavigate, user, onLogout }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user: authUser, loading } = useAuth();
+  const resolvedUser = authUser ?? user;
+  const metadataName = authUser?.user_metadata?.full_name;
+  const metadataAvatar = authUser?.user_metadata?.avatar_url;
+  const userName = metadataName || resolvedUser?.name || 'Cont';
+  const avatarValue = metadataAvatar || resolvedUser?.avatar || userName.charAt(0).toUpperCase();
+  const hasAvatarImage =
+    typeof avatarValue === 'string' && (avatarValue.startsWith('http://') || avatarValue.startsWith('https://'));
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -46,35 +55,39 @@ function Header({ currentPage, onNavigate, user, onLogout }) {
 
           <div className="header__actions">
             <button
-              className="header__btn header__btn--download"
-              onClick={() => navigate('download')}
-            >
-              ⬇️ Download
-            </button>
-
-            <button
               className="header__btn header__btn--navigate"
               onClick={() => navigate('map')}
             >
               🗺️ Navigheaza
             </button>
 
-            {user ? (
-              <button
-                className="header__btn header__btn--user"
-                onClick={() => navigate('dashboard')}
-              >
-                👤 {user.name || 'Cont'}
-              </button>
-            ) : (
-              <button
-                className="header__btn header__btn--auth"
-                onClick={() => navigate('login')}
-              >
-                <FacebookIcon />
-                Autentificare
-              </button>
-            )}
+            <div className="user-section">
+              {loading ? null : resolvedUser ? (
+                <button
+                  className="header__btn header__btn--user user-profile"
+                  onClick={() => navigate('dashboard')}
+                >
+                  <span className="header__user-avatar">
+                    {hasAvatarImage ? (
+                      <img src={avatarValue} alt={userName} />
+                    ) : (
+                      <span>{String(avatarValue).slice(0, 1).toUpperCase()}</span>
+                    )}
+                  </span>
+                  <span className="header__user-name">{userName}</span>
+                </button>
+              ) : (
+                <div className="auth-buttons">
+                  <button
+                    className="header__btn header__btn--auth"
+                    onClick={() => navigate('login')}
+                  >
+                    <FacebookIcon />
+                    Autentificare
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
           <button
@@ -88,18 +101,25 @@ function Header({ currentPage, onNavigate, user, onLogout }) {
       </header>
 
        <div className={`header__mobile-nav ${mobileOpen ? 'header__mobile-nav--open' : ''}`}>
-         <button className="header__mobile-link" onClick={() => navigate('download')}>
-           ⬇️ Download
-         </button>
-         <button className="header__mobile-link" onClick={() => navigate('map')}>
-           🗺️ Navigheaza
-         </button>
-         {user ? (
-           <>
-             <button className="header__mobile-link" onClick={() => { onLogout(); setMobileOpen(false); }}>
-               🚪 Deconectare
-             </button>
-           </>
+          <button className="header__mobile-link" onClick={() => navigate('map')}>
+            🗺️ Navigheaza
+          </button>
+          {loading ? null : resolvedUser ? (
+            <>
+              <button className="header__mobile-link header__mobile-link--profile" onClick={() => navigate('dashboard')}>
+                <span className="header__user-avatar">
+                  {hasAvatarImage ? (
+                    <img src={avatarValue} alt={userName} />
+                  ) : (
+                    <span>{String(avatarValue).slice(0, 1).toUpperCase()}</span>
+                  )}
+                </span>
+                <span className="header__user-name">{userName}</span>
+              </button>
+              <button className="header__mobile-link" onClick={() => { onLogout(); setMobileOpen(false); }}>
+                🚪 Deconectare
+              </button>
+            </>
           ) : (
             <button className="header__mobile-auth" onClick={() => navigate('login')}>
               <FacebookIcon />

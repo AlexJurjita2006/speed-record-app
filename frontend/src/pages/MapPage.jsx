@@ -7,6 +7,7 @@ import {
   fetchNavigationRoute,
   findNextInstruction,
   getDistanceMeters,
+  getClosestRoutePointIndex,
   getLegalSpeedForStep,
   LEGAL_SPEEDS_KMH,
 } from '../services/navigationService';
@@ -67,22 +68,36 @@ const getRouteDurationMinutes = (route) => {
   return 0;
 };
 
-const calculateRemainingMetrics = (currentPos, steps, coordinates) => {
+const NAV_POINT_REACHED_THRESHOLD_METERS = 30;
+const MAX_ROUTE_POINTS_ADVANCE_PER_UPDATE = 6;
+
+const getForwardProgressIndex = (currentPos, coordinates, startIndex) => {
+  if (!currentPos || !coordinates.length) {
+    return 0;
+  }
+
+  const currentPoint = [currentPos.lng, currentPos.lat];
+  let nextIndex = Math.min(Math.max(startIndex, 0), coordinates.length - 1);
+
+  while (nextIndex + 1 < coordinates.length) {
+    const distanceToNextPoint = getDistanceMeters(currentPoint, coordinates[nextIndex + 1]);
+    if (distanceToNextPoint > NAV_POINT_REACHED_THRESHOLD_METERS) {
+      break;
+    }
+    nextIndex += 1;
+  }
+
+  return nextIndex;
+};
+
+const calculateRemainingMetrics = (currentPos, steps, coordinates, startIndex = null) => {
   if (!currentPos || !coordinates.length) {
     return { distanceMeters: 0, etaSeconds: 0 };
   }
 
-  const currentPoint = [currentPos.lng, currentPos.lat];
-  let closestIdx = 0;
-  let minDist = Number.POSITIVE_INFINITY;
-
-  coordinates.forEach((coord, index) => {
-    const distance = getDistanceMeters(currentPoint, coord);
-    if (distance < minDist) {
-      minDist = distance;
-      closestIdx = index;
-    }
-  });
+  const closestIdx = Number.isInteger(startIndex)
+    ? Math.min(Math.max(startIndex, 0), coordinates.length - 1)
+    : getClosestRoutePointIndex(currentPos, coordinates);
 
   const hasSteps = steps.length > 0;
   let stepIdx = 0;
@@ -123,7 +138,9 @@ function MapPage() {
   const [eta, setEta] = useState('');
   const [navigationSteps, setNavigationSteps] = useState([]);
   const [fullNavCoordinates, setFullNavCoordinates] = useState([]); // [lng, lat]
+  const [visibleNavCoordinates, setVisibleNavCoordinates] = useState([]); // [lng, lat]
   const watchIdRef = useRef(null);
+  const furthestRouteIndexRef = useRef(0);
 
   const popularRoutes = [
     { id: 1, name: 'Ineu → Timișoara', origin: 'Ineu', destination: 'Timișoara', distance: 42.5, difficulty: 'Ușor' },
@@ -198,6 +215,8 @@ function MapPage() {
 
       setNavigationSteps(navData.steps);
       setFullNavCoordinates(navData.geometry.coordinates); // array de [lng, lat]
+      setVisibleNavCoordinates(navData.geometry.coordinates);
+      furthestRouteIndexRef.current = 0;
 
       // Pornim GPS-ul
       if (navigator.geolocation) {
@@ -235,6 +254,8 @@ function MapPage() {
     setNextInstruction(null);
     setNavigationSteps([]);
     setFullNavCoordinates([]);
+    setVisibleNavCoordinates([]);
+    furthestRouteIndexRef.current = 0;
   }, []);
 
   const handleRecalculate = useCallback(async () => {
@@ -248,6 +269,8 @@ function MapPage() {
       );
       setNavigationSteps(navData.steps);
       setFullNavCoordinates(navData.geometry.coordinates);
+      setVisibleNavCoordinates(navData.geometry.coordinates);
+      furthestRouteIndexRef.current = 0;
       // Actualizăm ruta din selectedRoute? Opțional, pentru coerență vizuală.
       setSelectedRoute(prev => ({
         ...prev,
@@ -267,15 +290,42 @@ function MapPage() {
   useEffect(() => {
     if (!navigating || !currentPosition || !navigationSteps.length || !fullNavCoordinates.length) return;
 
+    const closestIdx = getClosestRoutePointIndex(currentPosition, fullNavCoordinates);
+    const forwardProgressIdx = getForwardProgressIndex(
+      currentPosition,
+      fullNavCoordinates,
+      furthestRouteIndexRef.current
+    );
+    const cappedClosestIdx = Math.min(
+      closestIdx,
+      furthestRouteIndexRef.current + MAX_ROUTE_POINTS_ADVANCE_PER_UPDATE
+    );
+    const furthestIdx = Math.max(furthestRouteIndexRef.current, forwardProgressIdx, cappedClosestIdx);
+    furthestRouteIndexRef.current = furthestIdx;
+
     const next = findNextInstruction(currentPosition, navigationSteps, fullNavCoordinates);
     setNextInstruction(next);
 
     const { distanceMeters, etaSeconds } = calculateRemainingMetrics(
       currentPosition,
       navigationSteps,
-      fullNavCoordinates
+      fullNavCoordinates,
+      furthestIdx
     );
     setRemainingDistance(distanceMeters);
+
+    const userPoint = [currentPosition.lng, currentPosition.lat];
+    const remainingAfterUser = fullNavCoordinates.slice(Math.min(furthestIdx + 1, fullNavCoordinates.length));
+    const trimmedPath = [userPoint, ...remainingAfterUser];
+
+    if (trimmedPath.length === 1) {
+      const destinationPoint = fullNavCoordinates[fullNavCoordinates.length - 1];
+      if (destinationPoint) {
+        trimmedPath.push(destinationPoint);
+      }
+    }
+
+    setVisibleNavCoordinates(trimmedPath);
 
     const etaDate = new Date(Date.now() + etaSeconds * 1000);
     setEta(
@@ -344,6 +394,32 @@ function MapPage() {
                 <button className="map-page__navigate-btn" onClick={startNavigation}>
                   Începe navigarea
                 </button>
+
+                {navigationSteps.length > 0 && (
+                  <div className="map-page__steps-preview">
+                    <h4>📋 Instrucțiuni de navigare:</h4>
+                    <div className="map-page__steps-list">
+                      {navigationSteps.slice(0, 5).map((step, idx) => (
+                        <div key={idx} className="map-page__step-item">
+                          <span className="step-icon">{step.icon || '📍'}</span>
+                          <span className="step-text">{step.instruction}</span>
+                          {step.distance > 0 && (
+                            <span className="step-distance">
+                              {step.distance >= 1000 
+                                ? `${(step.distance / 1000).toFixed(1)} km` 
+                                : `${Math.round(step.distance)} m`}
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                      {navigationSteps.length > 5 && (
+                        <div className="map-page__steps-more">
+                          +{navigationSteps.length - 5} instrucțiuni
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -357,6 +433,8 @@ function MapPage() {
             routeData={selectedRoute}
             navigationMode={navigating}
             currentPosition={currentPosition}
+            navigationPathCoordinates={navigating ? visibleNavCoordinates : null}
+            offRouteCoordinates={navigating ? fullNavCoordinates : null}
             followUser={navigating}
             onRecalculate={handleRecalculate}
           />

@@ -1,8 +1,14 @@
 import { useState, useEffect } from 'react';
 import Leaderboard from '../components/Leaderboard';
+import { useAuth } from '../context/AuthContext';
 import './LeaderboardPage.css';
 
-function LeaderboardPage({ onNavigate }) {
+const isAvatarUrl = (value) =>
+  typeof value === 'string' && (value.startsWith('http://') || value.startsWith('https://'));
+
+function LeaderboardPage({ user }) {
+  const { user: authUser } = useAuth();
+  const currentUser = authUser ?? user;
   const [selectedCounty, setSelectedCounty] = useState('all');
   const [selectedRoute, setSelectedRoute] = useState('all');
   const [entries, setEntries] = useState([]);
@@ -40,6 +46,18 @@ function LeaderboardPage({ onNavigate }) {
         <p className="leaderboard-page__subtitle">
           Cei mai rapizi piloți din România, pe județe și rute
         </p>
+        {currentUser && (
+          <div className="leaderboard-page__user-chip">
+            <span className="leaderboard-page__user-avatar">
+              {isAvatarUrl(currentUser.user_metadata?.avatar_url || currentUser.avatar) ? (
+                <img src={currentUser.user_metadata?.avatar_url || currentUser.avatar} alt={currentUser.user_metadata?.full_name || currentUser.name || 'Pilot'} />
+              ) : (
+                <span>{String(currentUser.user_metadata?.full_name || currentUser.name || 'P').charAt(0).toUpperCase()}</span>
+              )}
+            </span>
+            <span className="leaderboard-page__user-name">{currentUser.user_metadata?.full_name || currentUser.name || 'Pilot'}</span>
+          </div>
+        )}
       </div>
 
       {/* Filtre */}

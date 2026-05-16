@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import appIcon from '../assets/icon.png';
 import './DownloadPage.css';
 
 const DownloadPage = () => {
@@ -109,7 +110,7 @@ const DownloadPage = () => {
         <div className="download-hero__content">
           <div className="download-hero__icon-wrapper">
             <img
-              src="/resources/icon.png"
+              src={appIcon}
               alt="Speed Record Logo"
               className="download-hero__icon"
               onError={(e) => {
@@ -118,6 +119,13 @@ const DownloadPage = () => {
               }}
             />
           </div>
+          <a
+            href={downloadUrl}
+            className="download-hero__android-btn"
+            download
+          >
+            Descarcă pe Android
+          </a>
           <h1 className="download-hero__title">
             <span className="download-hero__title--accent">SPEED</span>{' '}
             <span className="download-hero__title--light">RECORD</span>
@@ -145,7 +153,7 @@ const DownloadPage = () => {
                   <polyline points="7 10 12 15 17 10" />
                   <line x1="12" y1="15" x2="12" y2="3" />
                 </svg>
-                Descarcă APK
+                Descarcă pe Android
                 <span className="download-btn__size">~15 MB</span>
               </a>
 
