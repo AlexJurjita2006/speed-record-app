@@ -4,8 +4,33 @@ import { supabase } from '../services/supabaseClient';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);       // utilizatorul auth
+  const [profile, setProfile] = useState(null); // profilul public (username, avatar)
   const [loading, setLoading] = useState(true);
+
+  // Încărcăm profilul pe baza userului
+  const fetchProfile = async (userId) => {
+    if (!userId) return null;
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('username, avatar_url, full_name')
+      .eq('id', userId)
+      .single();
+    if (error) {
+      console.error('Eroare la încărcarea profilului:', error);
+      return null;
+    }
+    return data;
+  };
+
+  const refreshProfile = useCallback(async () => {
+    if (!user) {
+      setProfile(null);
+      return;
+    }
+    const profileData = await fetchProfile(user.id);
+    setProfile(profileData);
+  }, [user]);
 
   useEffect(() => {
     let isMounted = true;
@@ -14,21 +39,13 @@ export const AuthProvider = ({ children }) => {
       try {
         // Forțăm procesarea hash-ului dacă există
         if (window.location.hash || window.location.search) {
-          await supabase.auth.getSession(); // acesta va extrage tokenul din URL
+          await supabase.auth.getSession();
         }
-
         const { data: { session } } = await supabase.auth.getSession();
         if (!isMounted) return;
-
-        if (session?.user) {
-          console.log('Sesiune găsită:', session.user.email);
-          setUser(session.user);
-        } else {
-          console.log('Nicio sesiune activă');
-          setUser(null);
-        }
+        setUser(session?.user ?? null);
       } catch (err) {
-        console.error('Eroare inițializare sesiune:', err);
+        console.error(err);
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -36,9 +53,8 @@ export const AuthProvider = ({ children }) => {
 
     initSession();
 
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (!isMounted) return;
-      console.log('Auth state changed:', event, session?.user?.email);
       setUser(session?.user ?? null);
     });
 
@@ -47,6 +63,11 @@ export const AuthProvider = ({ children }) => {
       authListener?.subscription?.unsubscribe();
     };
   }, []);
+
+  // Când user se schimbă, reîncărcăm profilul
+  useEffect(() => {
+    refreshProfile();
+  }, [user, refreshProfile]);
 
   const signInWithGoogle = useCallback(async () => {
     await supabase.auth.signInWithOAuth({
@@ -58,13 +79,19 @@ export const AuthProvider = ({ children }) => {
   const signOut = useCallback(async () => {
     await supabase.auth.signOut();
     setUser(null);
+    setProfile(null);
   }, []);
 
-  return (
-    <AuthContext.Provider value={{ user, loading, signInWithGoogle, signOut }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const value = {
+    user,
+    profile,
+    loading,
+    signInWithGoogle,
+    signOut,
+    refreshProfile, // expunem pentru a putea reîncărca după onboarding
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => useContext(AuthContext);

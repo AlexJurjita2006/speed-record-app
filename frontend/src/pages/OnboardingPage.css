@@ -1,0 +1,123 @@
+.onboarding-page {
+  min-height: 100vh;
+  background: #0b0f15;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.onboarding-container {
+  background: #1a1f2b;
+  border-radius: 24px;
+  padding: 3rem 2rem;
+  max-width: 480px;
+  width: 100%;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.onboarding-container h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.onboarding-subtitle {
+  color: #8b949e;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.avatar-section {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.onboarding-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ff1a1a;
+  margin-bottom: 1rem;
+}
+
+.avatar-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  text-align: left;
+}
+
+.avatar-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer;
+  color: #b0b0c0;
+  transition: 0.2s;
+}
+
+.avatar-option.active {
+  border-color: #ff1a1a;
+  background: rgba(255,26,26,0.1);
+  color: white;
+}
+
+.avatar-option input[type="radio"] {
+  accent-color: #ff1a1a;
+}
+
+.username-section {
+  margin-bottom: 1.5rem;
+}
+
+.username-section label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #b0b0c0;
+  font-weight: 600;
+}
+
+.username-section input {
+  width: 100%;
+  padding: 0.9rem 1.2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: #0b0f15;
+  color: white;
+  font-size: 1rem;
+}
+
+.error-message {
+  background: rgba(255,26,26,0.15);
+  border: 1px solid #ff1a1a;
+  color: #ff4d4d;
+  padding: 0.8rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.btn-save {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 30px;
+  border: none;
+  background: linear-gradient(135deg, #ff1a1a, #cc0000);
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
