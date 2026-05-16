@@ -13,7 +13,9 @@ import EventsPage from './pages/EventsPage';
 import ContactPage from './pages/ContactPage';
 import TermsPage from './pages/TermsPage';
 import DownloadPage from './pages/DownloadPage';
+import OnboardingPage from './pages/OnboardingPage';
 import { useAuth } from './context/AuthContext';
+import { RequireOnboarding } from './components/RequireOnboarding';
 import { isWebApp } from './platform';
 import './App.css';
 
@@ -50,6 +52,8 @@ function App() {
         return 'register';
       case '/map':
         return 'map';
+      case '/onboarding':
+        return 'onboarding';
       case '/':
       default:
         return 'home';
@@ -78,6 +82,8 @@ function App() {
         return '/register';
       case 'map':
         return '/map';
+      case 'onboarding':
+        return '/onboarding';
       case 'home':
       default:
         return '/';
@@ -246,6 +252,13 @@ function App() {
 
       case 'register':
         return <RegisterPage onRegister={handleRegister} onNavigate={navigateTo} />;
+
+      case 'onboarding':
+        return (
+          <RequireOnboarding>
+            <OnboardingPage />
+          </RequireOnboarding>
+        );
 
       case 'map':
         return <MapPage onNavigate={navigateTo} />;
