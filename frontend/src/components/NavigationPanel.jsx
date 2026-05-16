@@ -4,13 +4,12 @@ import { useAuth } from '../context/AuthContext';
 import './NavigationPanel.css';
 
 const NavigationPanel = () => {
-  const { user, signInWithGoogle, signOut } = useAuth();
+  const { user, profile, signInWithGoogle, signOut } = useAuth();
   const [imgError, setImgError] = useState(false);
 
-  // Dacă user există, extragem datele
-  const avatarUrl = user?.user_metadata?.avatar_url;
-  const fullName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Utilizator';
-  const username = user?.user_metadata?.user_name || user?.email?.split('@')[0] || '';
+  const avatarUrl = profile?.avatar_url || user?.user_metadata?.avatar_url;
+  const displayName = profile?.username || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Utilizator';
+  const username = profile?.username ? `@${profile.username}` : '';
 
   return (
     <nav className="nav-panel">
@@ -29,19 +28,19 @@ const NavigationPanel = () => {
             {!imgError && avatarUrl ? (
               <img
                 src={avatarUrl}
-                alt={fullName}
+                alt={displayName}
                 className="user-avatar"
                 onError={() => setImgError(true)}
                 referrerPolicy="no-referrer"
               />
             ) : (
               <div className="user-avatar placeholder-avatar">
-                {fullName.charAt(0).toUpperCase()}
+                {displayName.charAt(0).toUpperCase()}
               </div>
             )}
             <div className="user-info">
-              <span className="user-name">{fullName}</span>
-              {username && <span className="user-username">@{username}</span>}
+              <span className="user-name">{displayName}</span>
+              {username && <span className="user-username">{username}</span>}
             </div>
             <button onClick={signOut} className="btn-signout" title="Deconectează-te">⏻</button>
           </div>
